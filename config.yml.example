@@ -1,0 +1,10 @@
+phabricator:
+  url: https://phab.example.com/api/
+  api-token: ''
+
+gitlab:
+  url: https://gitlab.example.com/api/v4/
+  private-token: ''
+
+email_domain: example.com
+generate_password: true
