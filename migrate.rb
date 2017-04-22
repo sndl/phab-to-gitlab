@@ -27,7 +27,7 @@ def migrate_user
 
     user = @gitlab.create_user(email, password, username, name: name)
 
-    gitlab.block_user(user.id) if u['fields']['roles'].include? 'disabled'
+    @gitlab.block_user(user.id) if u['fields']['roles'].include? 'disabled'
   end
 end
 
