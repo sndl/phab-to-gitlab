@@ -15,6 +15,12 @@ class Phabricator
     call(endpoint, options)
   end
 
+  def maniphest_search(options = {})
+    endpoint = 'maniphest.search'
+
+    call(endpoint, options)
+  end
+
   private def call(endpoint, data)
     url = "#{@url}#{endpoint}"
     data = { 'api.token' => @api_token }.merge(data)
