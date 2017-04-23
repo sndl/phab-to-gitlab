@@ -11,13 +11,14 @@ class Phabricator
 
   def user_search(options = {})
     endpoint = 'user.search'
-    data = { 'api.token' => @api_token }.merge(options)
 
-    call(endpoint, data)
+    call(endpoint, options)
   end
 
   private def call(endpoint, data)
     url = "#{@url}#{endpoint}"
+    data = { 'api.token' => @api_token }.merge(data)
+
     JSON.parse(RestClient.post(url, data).body)['result']['data']
   end
 end
