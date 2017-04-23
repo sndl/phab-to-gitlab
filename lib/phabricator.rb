@@ -30,9 +30,9 @@ class Phabricator
 
   def maniphest_gettasktransactions(task_id)
     endpoint = 'maniphest.gettasktransactions'
-    payload = { task_id: task_id }
+    payload = { ids: [task_id.to_s] }
 
-    call(endpoint, payload)[task_id]
+    call(endpoint, payload)[task_id.to_s]
   end
 
   private def call(endpoint, payload)
