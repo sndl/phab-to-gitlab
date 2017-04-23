@@ -21,10 +21,23 @@ class Phabricator
     call(endpoint, options)
   end
 
-  private def call(endpoint, data)
+  private def call(endpoint, payload)
     url = "#{@url}#{endpoint}"
-    data = { 'api.token' => @api_token }.merge(data)
+    payload = { 'api.token' => @api_token }.merge(payload)
+    data = []
+   
+    loop do 
+      response = JSON.parse(RestClient.post(url, payload).body)['result']
+      data.concat(response['data'])
 
-    JSON.parse(RestClient.post(url, data).body)['result']['data']
+      cursor = response['cursor']['after']
+      if cursor.nil?
+        break
+      else
+        payload[:after] = cursor
+      end
+    end 
+    
+    data
   end
 end
