@@ -21,6 +21,13 @@ class Phabricator
     call(endpoint, options)
   end
 
+  def maniphest_info(task_id)
+    endpoint = 'maniphest.info'
+    url = "#{@url}#{endpoint}"
+
+    JSON.parse(RestClient.post(url, { task_id: task_id, 'api.token': @api_token}).body)['result']
+  end
+
   private def call(endpoint, payload)
     url = "#{@url}#{endpoint}"
     payload = { 'api.token' => @api_token }.merge(payload)
