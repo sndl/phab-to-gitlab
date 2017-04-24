@@ -15,6 +15,12 @@ class Phabricator
     paginate(endpoint, options)
   end
 
+  def file_search(options = {})
+    endpoint = 'file.search'
+
+    paginate(endpoint, options)
+  end
+
   def maniphest_search(options = {})
     endpoint = 'maniphest.search'
 
