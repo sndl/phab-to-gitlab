@@ -49,11 +49,14 @@ def migrate_ticket
       info = @phab.maniphest_info(m['id'])
  
       ## Variables     
-      project_name = v
       title = m['fields']['name']
+
       puts "Importing: \"#{title}\""
 
+      project_name = v
       author = @phab.user_search({ constraints: { phids: [info['authorPHID']] } })[0]['fields']['username']
+      date_created = info['dateCreated']
+      is_closed = info["isClosed"]
 
       if info['ownerPHID'].nil?
         assignee = nil
@@ -71,15 +74,12 @@ def migrate_ticket
           description.sub!("{F#{id[1]}}", "[#{file_name}](/uploads/#{digest}/#{file_name})")
 
           download = open(file_url)
-          path = "uploads/#{project_name}/#{digest}/#{file_name}"
+          path = "uploads/#{project_name}/#{digest}/"
           FileUtils.mkpath(path)
           IO.copy_stream(download, "#{path}/#{file_name}") 
         end
       end
 
-      date_created = info['dateCreated']
-      is_closed = info["isClosed"]
-   
       options = {
         description: description,
         created_at: Time.at(date_created.to_i).iso8601,
@@ -98,6 +98,8 @@ def migrate_ticket
           author =  @phab.user_search({ constraints: { phids: [tx['authorPHID']] } })[0]['fields']['username']
           text = tx['comments']
 
+          next if text.nil?
+
           text.match(/{F([0-9]+)}/) do |id|
             @phab.file_search({ constraints: { ids: [id[1].to_i] } }).each do |f|
               file_name = f['fields']['name']
@@ -107,7 +109,7 @@ def migrate_ticket
               text.sub!("{F#{id[1]}}", "[#{file_name}](/uploads/#{digest}/#{file_name})")
 
               download = open(file_url)
-              path = "uploads/#{project_name}/#{digest}/#{file_name}"
+              path = "uploads/#{project_name}/#{digest}/"
               FileUtils.mkpath(path)
               IO.copy_stream(download, "#{path}/#{file_name}") 
             end
