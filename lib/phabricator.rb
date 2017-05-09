@@ -8,7 +8,7 @@ class Phabricator
   end
 
   def self.format_message(msg)
-    msg = msg.gsub(/^\[\]/, '* [ ]').gsub(/^\[x\]/, '* [x]')
+    msg = msg.gsub(/^\[\]/, '* [ ]').gsub(/^\[x\]/, '* [x]').gsub(/^lang=.*$/, '')
 
     return msg
   end
