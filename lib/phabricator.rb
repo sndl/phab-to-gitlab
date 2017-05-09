@@ -7,6 +7,12 @@ class Phabricator
     @api_token = api_token
   end
 
+  def self.format_message(msg)
+    msg = msg.gsub(/^\[\]/, '* [ ]').gsub(/^\[x\]/, '* [x]')
+
+    return msg
+  end
+
   def user_search(options = {})
     endpoint = 'user.search'
 
