@@ -65,7 +65,7 @@ def migrate_ticket
       end
 
       description = info['description']
-      description = Phabricator.format_message(description)
+      description = Phabricator.format_message(description) unless description.nil?
       description.match(/{F([0-9]+)}/) do |id|
         @phab.file_search({ constraints: { ids: [id[1].to_i] } }).each do |f|
           file_name = f['fields']['name']
@@ -98,7 +98,7 @@ def migrate_ticket
           date = Time.at(tx['dateCreated'].to_i).iso8601
           author =  @phab.user_search({ constraints: { phids: [tx['authorPHID']] } })[0]['fields']['username']
           text = tx['comments']
-          text = Phabricator.format_message(text)
+          text = Phabricator.format_message(text) unless text.nil?
 
           next if text.nil?
 
