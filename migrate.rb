@@ -42,7 +42,8 @@ def migrate_ticket
     options = {
       constraints: {
         projects: [k]
-      }
+      },
+      order: 'oldest'
     }
 
     @phab.maniphest_search(options).each do |m|
