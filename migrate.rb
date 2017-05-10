@@ -67,13 +67,13 @@ def migrate_ticket
 
       description = info['description']
       description = Phabricator.format_message(description) unless description.nil?
-      description.match(/{F([0-9]+)}/) do |id|
-        @phab.file_search({ constraints: { ids: [id[1].to_i] } }).each do |f|
+      description.scan(/{F([0-9]+)}/) do |id|
+        @phab.file_search({ constraints: { ids: [id[0].to_i] } }).each do |f|
           file_name = f['fields']['name']
           file_url = f['fields']['dataURI']
           digest = SecureRandom.hex(16)
 
-          description.sub!("{F#{id[1]}}", "[#{file_name}](/uploads/#{digest}/#{file_name})")
+          description = description.sub("{F#{id[0]}}", "[#{file_name}](/uploads/#{digest}/#{file_name})")
 
           download = open(file_url)
           path = "uploads/#{project_name}/#{digest}/"
@@ -103,13 +103,13 @@ def migrate_ticket
 
           next if text.nil?
 
-          text.match(/{F([0-9]+)}/) do |id|
-            @phab.file_search({ constraints: { ids: [id[1].to_i] } }).each do |f|
+          text.scan(/{F([0-9]+)}/) do |id|
+            @phab.file_search({ constraints: { ids: [id[0].to_i] } }).each do |f|
               file_name = f['fields']['name']
               file_url = f['fields']['dataURI']
               digest = SecureRandom.hex(16)
 
-              text.sub!("{F#{id[1]}}", "[#{file_name}](/uploads/#{digest}/#{file_name})")
+              text = text.sub("{F#{id[0]}}", "[#{file_name}](/uploads/#{digest}/#{file_name})")
 
               download = open(file_url)
               path = "uploads/#{project_name}/#{digest}/"
@@ -117,7 +117,6 @@ def migrate_ticket
               IO.copy_stream(download, "#{path}/#{file_name}") 
             end
           end
-					
           @gitlab.create_issue_note(project_name, iid, text, author, date)
         end
       end
