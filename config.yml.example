@@ -6,5 +6,8 @@ gitlab:
   url: https://gitlab.example.com/api/v4/
   private-token: ''
 
+# Lines below are only relevant for user migration
+# email_domain is needed to generate emails as it is not possibly to extract emails from Phabricator via API
 email_domain: example.com
+# if set to true it will automatically generate passwords based on SecureRandom output
 generate_password: true
