@@ -1,6 +1,12 @@
 ### Setup
 
 1. Run `bundler install`
+2. Configure your `config.yml` based on `config.yml.example`
+
+### Migrate Users
+
+To migrate users:
+1. Run `./migrate.rb user`
 
 ### Migrate Tickets
 
