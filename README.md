@@ -1,3 +1,15 @@
+### Setup
+
+1. Run `bundler install`
+
+### Migrate Tickets
+
+To migrate tickets:
+1. Ensure that all required users have admin rights in gitlab
+2. Configure correct mapping in `mapping.yml`
+3. Run `./migrate.rb ticket`
+4. When the process is finished there will be `uploads` directory, its content need to be uploaded to your gitlab server with correct permissions
+
 ### Known issues
 
 * It is not possible to extract emails from Phabricator via API so they are generated based on username + email_domain option
